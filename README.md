@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/ZENITHBanner.png" alt="Zenith NPO Platform" width="900">
+  <img src="documents/images/ZENITHBanner.png" alt="Zenith NPO Platform" width="900">
 </p>
 
 <h1 align="center">Zenith NPO Platform</h1>

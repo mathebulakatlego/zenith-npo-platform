@@ -1,3 +1,7 @@
+<p align="center">
+   <img src="../images/usecasesbanner.png" alt="Zenith NPO Platform" width="900">
+</p>
+
 # Zenith Platform : User Stories & Use Cases
 
 **Version:** 1.0 | **Status:** V1 Baseline

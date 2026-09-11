@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../images/domainBanner.png" alt="Zenith NPO Platform" width="900">
+</p>
+
 # Zenith Platform : Domain Model
 
 **Version:** 1.0 | **Status:** V1 Baseline

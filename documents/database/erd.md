@@ -1,3 +1,7 @@
+<p align="center">
+    <img src="../images/erdBanner.png" alt="Zenith NPO Platform" width="900">
+</p>
+
 # Zenith Platform : Entity Relationship Diagram
 
 **Version:** 1.0 | **Status:** V1 Baseline

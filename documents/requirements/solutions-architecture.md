@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../images/solutionarchitectbanner.png" alt="Zenith NPO Platform" width="900">
+</p>
+
 # Zenith Platform : Solution Architecture
 
 **Version:** 1.0 | **Status:** V1 Baseline

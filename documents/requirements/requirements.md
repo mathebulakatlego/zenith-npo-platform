@@ -1,3 +1,7 @@
+<p align="center">
+        <img src="../images/requirementsbanner.png" alt="Zenith NPO Platform" width="900">
+</p>
+
 # Zenith Platform : Requirements
 
 **Version:** 1.0 | **Status:** V1 Baseline | **Date:** September 2026

@@ -2,9 +2,9 @@
   <img src="docs/ZENITHBanner.png" alt="Zenith NPO Platform" width="900">
 </p>
 
-<h1 >Zenith NPO Platform</h1>
+<h1 align="center">Zenith NPO Platform</h1>
 
-<p>
+<p align="center">
   A full-stack platform for managing applications, learners and programme progress for Zenith Future Skills Hub.
 </p>
 

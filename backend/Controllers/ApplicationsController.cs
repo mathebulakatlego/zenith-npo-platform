@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zenith.Api.Data;
 using Zenith.Api.Models;
+using Zenith.Api.DTOs;
 
 namespace Zenith.Api.Controllers;
 
@@ -42,18 +43,29 @@ public class ApplicationsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Application>> CreateApplication(Application application)
+    public async Task<ActionResult<Application>> CreateApplication(ApplicationCreateDto dto)
     {
         var applicantExists = await _context.Applicants
-            .AnyAsync(a => a.Id == application.ApplicantId);
+        .AnyAsync(a => a.Id == dto.ApplicantId);
+
+        if (!applicantExists)
+        {
+            return BadRequest("The Applicant does not exist.");
+        }
 
         var programmeExists = await _context.Programmes
-            .AnyAsync(p => p.Id == application.ProgrammeId);
+            .AnyAsync(p => p.Id == dto.ProgrammeId);
 
-        if (!applicantExists || !programmeExists)
+        if (!programmeExists)
         {
-            return BadRequest("The Applicant or Programme does not exist.");
+            return BadRequest("The Programme does not exist.");
         }
+
+        var application = new Application
+        {
+            ApplicantId = dto.ApplicantId,
+            ProgrammeId = dto.ProgrammeId
+        };
 
         _context.Applications.Add(application);
         await _context.SaveChangesAsync();
@@ -62,7 +74,7 @@ public class ApplicationsController : ControllerBase
             nameof(GetApplication),
             new { id = application.Id },
             application);
-    }
+}
 
     [HttpPut("{id}/status")]
     public async Task<IActionResult> UpdateStatus(int id, [FromBody] string status)

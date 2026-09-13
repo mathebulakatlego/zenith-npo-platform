@@ -47,7 +47,7 @@
 
     <Compile Include="..\DTOs\ProgrammeCreateDto.cs" Link="DTOs/ProgrammeCreateDto.cs" />
     <compile Include="..\DTOs\ApplicantCreateDto.cs" Link="DTOs/ApplicantCreateDto.cs" />
-     
+    <Compile Include="..\DTOs\ApplicationCreateDto.cs" Link="DTOs/ApplicationCreateDto.cs" /> 
       
   </ItemGroup>
 

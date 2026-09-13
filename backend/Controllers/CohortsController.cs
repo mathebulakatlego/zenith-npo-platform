@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zenith.Api.Data;
 using Zenith.Api.Models;
-
-namespace Zenith.Api.Controllers;
+using Zenith.Api.DTOs;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -40,22 +39,36 @@ public class CohortsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Cohort>> CreateCohort(Cohort cohort)
+    public async Task<ActionResult<Cohort>> CreateCohort(CohortCreateDto dto)
     {
         var programmeExists = await _context.Programmes
-            .AnyAsync(p => p.Id == cohort.ProgrammeId);
+            .AnyAsync(p => p.Id == dto.ProgrammeId);
 
         if (!programmeExists)
         {
             return BadRequest("The Programme does not exist.");
         }
 
-        _context.Cohorts.Add(cohort);
-        await _context.SaveChangesAsync();
+        if (dto.EndDate <= dto.StartDate)
+        {
+            return BadRequest("End date must be after start date.");
+        }
 
-        return CreatedAtAction(
-            nameof(GetCohort),
-            new { id = cohort.Id },
-            cohort);
-    }
+        var cohort = new Cohort
+        {
+            ProgrammeId = dto.ProgrammeId,
+            Name = dto.Name,
+            StartDate = dto.StartDate,
+            EndDate = dto.EndDate,
+            Status = dto.Status
+        };
+
+    _context.Cohorts.Add(cohort);
+    await _context.SaveChangesAsync();
+
+    return CreatedAtAction(
+        nameof(GetCohort),
+        new { id = cohort.Id },
+        cohort);
+}
 }

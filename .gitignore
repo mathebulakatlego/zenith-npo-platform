@@ -1,0 +1,10 @@
+# .NET build output
+**/bin/
+**/obj/
+
+# Local database
+zenith.db
+
+# Frontend dependencies and build output
+frontend/node_modules/
+frontend/dist/

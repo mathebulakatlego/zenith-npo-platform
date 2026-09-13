@@ -60,6 +60,21 @@ public class ProgressController : ControllerBase
             return BadRequest("Percentage must be between 0 and 100.");
         }
 
+        if (progress.Percentage == 0 && progress.Status != "Not Started")
+        {
+            return BadRequest("A percentage of 0 must have a status of Not Started.");
+        }
+
+        if (progress.Percentage > 0 && progress.Percentage < 100 && progress.Status != "In Progress")
+{
+    return BadRequest("A percentage between 1 and 99 must have a status of In Progress.");
+}
+
+        if (progress.Percentage == 100 && progress.Status != "Completed")
+            {
+                return BadRequest("A percentage of 100 must have a status of Completed.");
+            }
+
         _context.Progress.Add(progress);
         await _context.SaveChangesAsync();
 

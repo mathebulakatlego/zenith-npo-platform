@@ -55,6 +55,14 @@ public class ProgressController : ControllerBase
             return BadRequest("The Learner or Module does not exist.");
         }
 
+        var progressExists = await _context.Progress
+        .AnyAsync(p => p.LearnerId == progress.LearnerId && p.ModuleId == progress.ModuleId);
+
+        if (progressExists)
+        {
+            return BadRequest("Progress already exists for this Learner and Module.");
+        }
+        
         if (progress.Percentage < 0 || progress.Percentage > 100)
         {
             return BadRequest("Percentage must be between 0 and 100.");

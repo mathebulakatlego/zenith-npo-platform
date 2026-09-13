@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Zenith.Api.Data;
 using Zenith.Api.Models;
 using Zenith.Api.Services;
+using Zenith.Api.DTOs;
 
 namespace Zenith.Api.Controllers;
 
@@ -45,21 +46,25 @@ public class LearnersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Learner>> CreateLearner(Learner learner)
+    public async Task<ActionResult<Learner>> CreateLearner(LearnerCreateDto dto)
     {
         var application = await _context.Applications
-            .FirstOrDefaultAsync(a => a.Id == learner.ApplicationId);
+            .FirstOrDefaultAsync(a => a.Id == dto.ApplicationId);
 
         if (application == null)
         {
-             return BadRequest("The Application does not exist.");
+            return BadRequest("The Application does not exist.");
         }
 
         if (application.Status != "Approved")
         {
             return BadRequest("Only approved applications can be converted to learners.");
         }
-  
+
+        var learner = new Learner
+        {
+            ApplicationId = dto.ApplicationId
+        };
 
         _context.Learners.Add(learner);
         await _context.SaveChangesAsync();

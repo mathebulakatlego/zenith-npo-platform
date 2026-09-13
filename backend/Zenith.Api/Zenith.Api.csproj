@@ -43,12 +43,13 @@
     <Compile Include="..\Models\Result.cs" Link="Models/Result.cs" />
     <Compile Include="..\Controllers\ResultsController.cs" Link="Controllers/ResultsController.cs" />
 
-    <Compile Include="..\Services\GraduationEligibilityService.cs" Link="Services/GraduationEligibilityService.cs" />
+    <Compile Include="..\Services\GraduationEligibilityService.cs" Link="Services/GraduationEligibilityService.cs"/>
 
     <Compile Include="..\DTOs\ProgrammeCreateDto.cs" Link="DTOs/ProgrammeCreateDto.cs" />
     <compile Include="..\DTOs\ApplicantCreateDto.cs" Link="DTOs/ApplicantCreateDto.cs" />
     <Compile Include="..\DTOs\ApplicationCreateDto.cs" Link="DTOs/ApplicationCreateDto.cs" /> 
-      
+    <Compile Include="..\DTOs\LearnerCreateDto.cs" Link="DTOs/LearnerCreateDto.cs" />
+
   </ItemGroup>
 
 </Project>

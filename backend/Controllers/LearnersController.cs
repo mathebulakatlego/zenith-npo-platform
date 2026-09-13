@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zenith.Api.Data;
 using Zenith.Api.Models;
+using Zenith.Api.Services;
 
 namespace Zenith.Api.Controllers;
 
@@ -10,10 +11,14 @@ namespace Zenith.Api.Controllers;
 public class LearnersController : ControllerBase
 {
     private readonly ZenithDbContext _context;
+    private readonly GraduationEligibilityService _eligibilityService;
 
-    public LearnersController(ZenithDbContext context)
+    public LearnersController(
+        ZenithDbContext context,
+        GraduationEligibilityService eligibilityService)
     {
         _context = context;
+        _eligibilityService = eligibilityService;
     }
 
     [HttpGet]
@@ -42,13 +47,19 @@ public class LearnersController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Learner>> CreateLearner(Learner learner)
     {
-        var applicationExists = await _context.Applications
-            .AnyAsync(a => a.Id == learner.ApplicationId);
+        var application = await _context.Applications
+            .FirstOrDefaultAsync(a => a.Id == learner.ApplicationId);
 
-        if (!applicationExists)
+        if (application == null)
         {
-            return BadRequest("The Application does not exist.");
+             return BadRequest("The Application does not exist.");
         }
+
+        if (application.Status != "Approved")
+        {
+            return BadRequest("Only approved applications can be converted to learners.");
+        }
+  
 
         _context.Learners.Add(learner);
         await _context.SaveChangesAsync();
@@ -57,5 +68,21 @@ public class LearnersController : ControllerBase
             nameof(GetLearner),
             new { id = learner.Id },
             learner);
+    }
+
+    [HttpGet("{id}/eligibility")]
+    public async Task<ActionResult<bool>> GetEligibility(int id)
+    {
+        var learnerExists = await _context.Learners
+            .AnyAsync(l => l.Id == id);
+
+        if (!learnerExists)
+        {
+            return NotFound();
+        }
+
+        var eligible = await _eligibilityService.IsEligibleAsync(id);
+
+        return Ok(eligible);
     }
 }

@@ -42,6 +42,9 @@
 
     <Compile Include="..\Models\Result.cs" Link="Models/Result.cs" />
     <Compile Include="..\Controllers\ResultsController.cs" Link="Controllers/ResultsController.cs" />
+
+    <Compile Include="..\Services\GraduationEligibilityService.cs" Link="Services/GraduationEligibilityService.cs" />
+
   </ItemGroup>
 
 </Project>

@@ -14,24 +14,30 @@ public class GraduationEligibilityService
 
     public async Task<bool> IsEligibleAsync(int learnerId)
     {
-        var learnerExists = await _context.Learners
-            .AnyAsync(l => l.Id == learnerId);
+        var learner = await _context.Learners
+            .Include(l => l.Application)
+            .FirstOrDefaultAsync(l => l.Id == learnerId);
 
-        if (!learnerExists)
+        if (learner == null)
         {
             return false;
         }
 
+        var programmeId = learner.Application.ProgrammeId;
+
         var moduleCount = await _context.Modules
-            .CountAsync();
+            .CountAsync(m => m.ProgrammeId == programmeId);
 
         var completedModuleCount = await _context.Progress
             .CountAsync(p =>
                 p.LearnerId == learnerId &&
+                p.Module.ProgrammeId == programmeId &&
                 p.Status == "Completed");
 
         var averageMark = await _context.Results
-            .Where(r => r.LearnerId == learnerId)
+            .Where(r =>
+                r.LearnerId == learnerId &&
+                r.Module.ProgrammeId == programmeId)
             .Select(r => (decimal?)r.Mark)
             .AverageAsync() ?? 0;
 

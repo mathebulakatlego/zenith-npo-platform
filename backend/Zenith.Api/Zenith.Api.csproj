@@ -8,7 +8,40 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.30" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.30">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.30" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+  <Compile Include="..\Data\ZenithDbContext.cs" Link="Data\ZenithDbContext.cs" />
+
+    <Compile Include="..\Controllers\ProgrammesController.cs" Link="Controllers\ProgrammesController.cs" />
+    <Compile Include="..\Models\Programme.cs" Link="Models\Programme.cs" />
+
+    <Compile Include="..\Models\Applicant.cs" Link="Models\Applicant.cs" />
+    <Compile Include="..\Controllers\ApplicantsController.cs" Link="Controllers\ApplicantsController.cs" />
+
+    <Compile Include="..\Models\Application.cs" Link="Models/Application.cs" />
+    <Compile Include="..\Controllers\ApplicationsController.cs" Link="Controllers/ApplicationsController.cs" />
+
+    <Compile Include="..\Models\Learner.cs" Link="Models/Learner.cs" />
+    <Compile Include="..\Controllers\LearnersController.cs" Link="Controllers/LearnersController.cs" />
+
+    <Compile Include="..\Models\Cohort.cs" Link="Models/Cohort.cs" />
+    <Compile Include="..\Controllers\CohortsController.cs" Link="Controllers/CohortsController.cs" />
+
+    <Compile Include="..\Models\Module.cs" Link="Models/Module.cs" />
+    <Compile Include="..\Controllers\ModulesController.cs" Link="Controllers/ModulesController.cs" />
+
+    <Compile Include="..\Models\Progress.cs" Link="Models/Progress.cs" />
+    <Compile Include="..\Controllers\ProgressController.cs" Link="Controllers/ProgressController.cs" />
+
+    <Compile Include="..\Models\Result.cs" Link="Models/Result.cs" />
+    <Compile Include="..\Controllers\ResultsController.cs" Link="Controllers/ResultsController.cs" />
   </ItemGroup>
 
 </Project>

@@ -50,6 +50,14 @@ public class ResultsController : ControllerBase
         var moduleExists = await _context.Modules
             .AnyAsync(m => m.Id == result.ModuleId);
 
+        var resultExists = await _context.Results
+            .AnyAsync(r => r.LearnerId == result.LearnerId && r.ModuleId == result.ModuleId);
+
+        if (resultExists)
+        {
+            return BadRequest("A result already exists for this Learner and Module.");
+        }
+
         if (!learnerExists || !moduleExists)
         {
             return BadRequest("The Learner or Module does not exist.");

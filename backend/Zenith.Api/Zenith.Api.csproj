@@ -45,6 +45,10 @@
 
     <Compile Include="..\Services\GraduationEligibilityService.cs" Link="Services/GraduationEligibilityService.cs" />
 
+    <Compile Include="..\DTOs\ProgrammeCreateDto.cs" Link="DTOs/ProgrammeCreateDto.cs" />
+    <compile Include="..\DTOs\ApplicantCreateDto.cs" Link="DTOs/ApplicantCreateDto.cs" />
+     
+      
   </ItemGroup>
 
 </Project>

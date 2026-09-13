@@ -51,7 +51,9 @@
     <Compile Include="..\DTOs\LearnerCreateDto.cs" Link="DTOs/LearnerCreateDto.cs" />
     <Compile Include="..\DTOs\CohortCreateDto.cs" Link="DTOs/CohortCreateDto.cs" />
     <Compile Include="..\DTOs\ModuleCreateDto.cs" Link="DTOs/ModuleCreateDto.cs" />
-    
+    <Compile Include="..\DTOs\ProgressCreateDto.cs" Link="DTOs/ProgressCreateDto.cs" />
+    <Compile Include="..\DTOs\ResultCreateDto.cs" Link="DTOs/ResultCreateDto.cs" />
+
   </ItemGroup>
 
 </Project>

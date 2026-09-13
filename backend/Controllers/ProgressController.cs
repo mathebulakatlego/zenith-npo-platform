@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zenith.Api.Data;
 using Zenith.Api.Models;
+using Zenith.Api.DTOs;
 
 namespace Zenith.Api.Controllers;
 
@@ -42,46 +43,48 @@ public class ProgressController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Progress>> CreateProgress(Progress progress)
+    public async Task<ActionResult<Progress>> CreateProgress(ProgressCreateDto dto)
     {
         var learnerExists = await _context.Learners
-            .AnyAsync(l => l.Id == progress.LearnerId);
+            .AnyAsync(l => l.Id == dto.LearnerId);
+
+        if (!learnerExists)
+        {
+            return BadRequest("The Learner does not exist.");
+        }
 
         var moduleExists = await _context.Modules
-            .AnyAsync(m => m.Id == progress.ModuleId);
+            .AnyAsync(m => m.Id == dto.ModuleId);
 
-        if (!learnerExists || !moduleExists)
+        if (!moduleExists)
         {
-            return BadRequest("The Learner or Module does not exist.");
+            return BadRequest("The Module does not exist.");
         }
 
         var progressExists = await _context.Progress
-        .AnyAsync(p => p.LearnerId == progress.LearnerId && p.ModuleId == progress.ModuleId);
+            .AnyAsync(p =>
+                p.LearnerId == dto.LearnerId &&
+                p.ModuleId == dto.ModuleId);
 
         if (progressExists)
         {
             return BadRequest("Progress already exists for this Learner and Module.");
         }
-        
-        if (progress.Percentage < 0 || progress.Percentage > 100)
+
+        var status = dto.Percentage switch
         {
-            return BadRequest("Percentage must be between 0 and 100.");
-        }
+            0 => "Not Started",
+            100 => "Completed",
+            _ => "In Progress"
+        };
 
-        if (progress.Percentage == 0 && progress.Status != "Not Started")
+        var progress = new Progress
         {
-            return BadRequest("A percentage of 0 must have a status of Not Started.");
-        }
-
-        if (progress.Percentage > 0 && progress.Percentage < 100 && progress.Status != "In Progress")
-{
-    return BadRequest("A percentage between 1 and 99 must have a status of In Progress.");
-}
-
-        if (progress.Percentage == 100 && progress.Status != "Completed")
-            {
-                return BadRequest("A percentage of 100 must have a status of Completed.");
-            }
+            LearnerId = dto.LearnerId,
+            ModuleId = dto.ModuleId,
+            Percentage = dto.Percentage,
+            Status = status
+        };
 
         _context.Progress.Add(progress);
         await _context.SaveChangesAsync();

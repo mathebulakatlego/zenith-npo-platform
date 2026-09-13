@@ -63,4 +63,28 @@ public class ApplicationsController : ControllerBase
             new { id = application.Id },
             application);
     }
+
+    [HttpPut("{id}/status")]
+    public async Task<IActionResult> UpdateStatus(int id, [FromBody] string status)
+    {
+         var application = await _context.Applications.FindAsync(id);
+
+        if (application == null)
+        {
+            return NotFound();
+        }
+
+        var validStatuses = new[] { "Pending", "Approved", "Rejected" };
+
+        if (!validStatuses.Contains(status))
+        {
+            return BadRequest("Status must be Pending, Approved, or Rejected.");
+        }
+
+        application.Status = status;
+
+        await _context.SaveChangesAsync();
+
+        return Ok(application);
+    }
 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zenith.Api.Data;
 using Zenith.Api.Models;
+using Zenith.Api.DTOs;
 
 namespace Zenith.Api.Controllers;
 
@@ -41,15 +42,28 @@ public class ModulesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Module>> CreateModule(Module module)
+    public async Task<ActionResult<Module>> CreateModule(ModuleCreateDto dto)
     {
         var programmeExists = await _context.Programmes
-            .AnyAsync(p => p.Id == module.ProgrammeId);
+            .AnyAsync(p => p.Id == dto.ProgrammeId);
 
         if (!programmeExists)
         {
             return BadRequest("The Programme does not exist.");
         }
+
+        if (dto.Order < 1)
+        {
+            return BadRequest("Module order must be greater than 0.");
+        }
+
+        var module = new Module
+        {
+            ProgrammeId = dto.ProgrammeId,
+            Name = dto.Name,
+            Order = dto.Order,
+            IsActive = dto.IsActive
+        };
 
         _context.Modules.Add(module);
         await _context.SaveChangesAsync();

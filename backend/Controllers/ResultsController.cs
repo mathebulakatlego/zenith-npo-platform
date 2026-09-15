@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zenith.Api.Data;
 using Zenith.Api.Models;
+using Zenith.Api.DTOs;
 
 namespace Zenith.Api.Controllers;
 
@@ -42,31 +43,38 @@ public class ResultsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Result>> CreateResult(Result result)
+    public async Task<ActionResult<Result>> CreateResult(ResultCreateDto dto)
     {
         var learnerExists = await _context.Learners
-            .AnyAsync(l => l.Id == result.LearnerId);
+            .AnyAsync(l => l.Id == dto.LearnerId);
+
+        if (!learnerExists)
+        {
+            return BadRequest("The Learner does not exist.");
+        }
 
         var moduleExists = await _context.Modules
-            .AnyAsync(m => m.Id == result.ModuleId);
+            .AnyAsync(m => m.Id == dto.ModuleId);
+
+        if (!moduleExists)
+        {
+            return BadRequest("The Module does not exist.");
+        }
 
         var resultExists = await _context.Results
-            .AnyAsync(r => r.LearnerId == result.LearnerId && r.ModuleId == result.ModuleId);
+            .AnyAsync(r => r.LearnerId == dto.LearnerId && r.ModuleId == dto.ModuleId);
 
         if (resultExists)
         {
             return BadRequest("A result already exists for this Learner and Module.");
         }
 
-        if (!learnerExists || !moduleExists)
+        var result = new Result
         {
-            return BadRequest("The Learner or Module does not exist.");
-        }
-
-        if (result.Mark < 0 || result.Mark > 100)
-        {
-            return BadRequest("Mark must be between 0 and 100.");
-        }
+            LearnerId = dto.LearnerId,
+            ModuleId = dto.ModuleId,
+            Mark = dto.Mark
+        };
 
         _context.Results.Add(result);
         await _context.SaveChangesAsync();

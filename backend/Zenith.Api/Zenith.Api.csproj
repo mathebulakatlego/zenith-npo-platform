@@ -53,7 +53,7 @@
     <Compile Include="..\DTOs\ModuleCreateDto.cs" Link="DTOs/ModuleCreateDto.cs" />
     <Compile Include="..\DTOs\ProgressCreateDto.cs" Link="DTOs/ProgressCreateDto.cs" />
     <Compile Include="..\DTOs\ResultCreateDto.cs" Link="DTOs/ResultCreateDto.cs" />
-
+    <Compile Include="..\DTOs\ApplicationResponseDto.cs" Link="DTOs/ApplicationResponseDto.cs" />
   </ItemGroup>
 
 </Project>

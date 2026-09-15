@@ -18,28 +18,43 @@ public class ApplicationsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Application>>> GetApplications()
+    public async Task<ActionResult<IEnumerable<ApplicationResponseDto>>> GetApplications()
     {
-        return await _context.Applications
-            .Include(a => a.Applicant)
-            .Include(a => a.Programme)
+        var applications = await _context.Applications
+            .Select(a => new ApplicationResponseDto
+            {
+                Id = a.Id,
+                ApplicantId = a.ApplicantId,
+                ProgrammeId = a.ProgrammeId,
+                SubmittedAt = a.SubmittedAt,
+                Status = a.Status
+            })
             .ToListAsync();
+
+        return Ok(applications);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Application>> GetApplication(int id)
+public async Task<ActionResult<ApplicationResponseDto>> GetApplication(int id)
     {
         var application = await _context.Applications
-            .Include(a => a.Applicant)
-            .Include(a => a.Programme)
-            .FirstOrDefaultAsync(a => a.Id == id);
+            .Where(a => a.Id == id)
+            .Select(a => new ApplicationResponseDto
+            {
+                Id = a.Id,
+                ApplicantId = a.ApplicantId,
+                ProgrammeId = a.ProgrammeId,
+                SubmittedAt = a.SubmittedAt,
+                Status = a.Status
+            })
+            .FirstOrDefaultAsync();
 
         if (application == null)
         {
             return NotFound();
         }
 
-        return application;
+        return Ok(application);
     }
 
     [HttpPost]

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zenith.Api.Data;
 using Zenith.Api.Models;
+using Zenith.Api.DTOs;
 
 namespace Zenith.Api.Controllers;
 
@@ -36,11 +37,21 @@ public class ProgrammesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Programme>> CreateProgramme(Programme programme)
+    public async Task<ActionResult<Programme>> CreateProgramme(ProgrammeCreateDto dto)
     {
+        var programme = new Programme
+        {
+            Name = dto.Name,
+            Description = dto.Description,
+            IsActive = dto.IsActive
+        };
+
         _context.Programmes.Add(programme);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetProgramme), new { id = programme.Id }, programme);
+        return CreatedAtAction(
+            nameof(GetProgramme),
+            new { id = programme.Id },
+            programme);
     }
 }

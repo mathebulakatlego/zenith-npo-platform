@@ -54,6 +54,8 @@
     <Compile Include="..\DTOs\ProgressCreateDto.cs" Link="DTOs/ProgressCreateDto.cs" />
     <Compile Include="..\DTOs\ResultCreateDto.cs" Link="DTOs/ResultCreateDto.cs" />
     <Compile Include="..\DTOs\ApplicationResponseDto.cs" Link="DTOs/ApplicationResponseDto.cs" />
+    <Compile Include="..\DTOs\LearnerResponseDto.cs" Link="DTOs/LearnerResponseDto.cs" />
+
   </ItemGroup>
 
 </Project>

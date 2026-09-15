@@ -36,7 +36,11 @@ public class ResultsController : ControllerBase
 
         if (result == null)
         {
-            return NotFound();
+            return NotFound(new ProblemDetails
+            {
+                Title = "Applicant not found",
+                Status = StatusCodes.Status404NotFound
+            });
         }
 
         return result;
@@ -50,7 +54,11 @@ public class ResultsController : ControllerBase
 
         if (!learnerExists)
         {
-            return BadRequest("The Learner does not exist.");
+            return BadRequest(new ProblemDetails
+            {
+                Title = "The Learner does not exist.",
+                Status = StatusCodes.Status400BadRequest
+            });
         }
 
         var moduleExists = await _context.Modules
@@ -58,7 +66,12 @@ public class ResultsController : ControllerBase
 
         if (!moduleExists)
         {
-            return BadRequest("The Module does not exist.");
+            return BadRequest(new ProblemDetails
+            {
+                Title = "The Module does not exist.",
+                Status = StatusCodes.Status400BadRequest
+            });
+            
         }
 
         var resultExists = await _context.Results
@@ -66,7 +79,12 @@ public class ResultsController : ControllerBase
 
         if (resultExists)
         {
-            return BadRequest("A result already exists for this Learner and Module.");
+            return BadRequest(new ProblemDetails
+            {
+                Title = "A result already exists for this Learner and Module.",
+                Status = StatusCodes.Status400BadRequest
+            });
+            
         }
 
         var result = new Result

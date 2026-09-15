@@ -34,11 +34,11 @@ public class ResultsController : ControllerBase
             .Include(r => r.Module)
             .FirstOrDefaultAsync(r => r.Id == id);
 
-        if (result == null)
+       if (result == null)
         {
             return NotFound(new ProblemDetails
             {
-                Title = "Applicant not found",
+                Title = "Result not found",
                 Status = StatusCodes.Status404NotFound
             });
         }
@@ -79,12 +79,11 @@ public class ResultsController : ControllerBase
 
         if (resultExists)
         {
-            return BadRequest(new ProblemDetails
+            return Conflict(new ProblemDetails
             {
                 Title = "A result already exists for this Learner and Module.",
-                Status = StatusCodes.Status400BadRequest
+                Status = StatusCodes.Status409Conflict
             });
-            
         }
 
         var result = new Result

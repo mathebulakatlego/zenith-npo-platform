@@ -23,28 +23,48 @@ public class LearnersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Learner>>> GetLearners()
-    {
-        return await _context.Learners
-            .Include(l => l.Application)
-            .ToListAsync();
-    }
+public async Task<ActionResult<IEnumerable<LearnerResponseDto>>> GetLearners()
+{
+    var learners = await _context.Learners
+        .Select(l => new LearnerResponseDto
+        {
+            Id = l.Id,
+            ApplicationId = l.ApplicationId,
+            EnrolledAt = l.EnrolledAt,
+            Status = l.Status
+        })
+        .ToListAsync();
+
+    return Ok(learners);
+}
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Learner>> GetLearner(int id)
+    public async Task<ActionResult<LearnerResponseDto>> GetLearner(int id)
     {
         var learner = await _context.Learners
-            .Include(l => l.Application)
-            .FirstOrDefaultAsync(l => l.Id == id);
+            .Where(l => l.Id == id)
+            .Select(l => new LearnerResponseDto
+            {
+                Id = l.Id,
+                ApplicationId = l.ApplicationId,
+                EnrolledAt = l.EnrolledAt,
+                Status = l.Status
+            })
+            .FirstOrDefaultAsync();
 
         if (learner == null)
         {
-            return NotFound();
+           return NotFound(new ProblemDetails
+            {
+                Title = "Applicant not found",
+                Status = StatusCodes.Status404NotFound
+            });
         }
 
-        return learner;
+        return Ok(learner);
     }
 
+        
     [HttpPost]
     public async Task<ActionResult<Learner>> CreateLearner(LearnerCreateDto dto)
     {
@@ -53,18 +73,27 @@ public class LearnersController : ControllerBase
 
         if (application == null)
         {
-            return BadRequest("The Application does not exist.");
+            return BadRequest(new ProblemDetails
+            {
+                Title = "Application does not exist",
+                Status = StatusCodes.Status400BadRequest
+            });
         }
 
         if (application.Status != "Approved")
         {
-            return BadRequest("Only approved applications can be converted to learners.");
+            return BadRequest(new ProblemDetails
+            {
+                Title = "Only approved applications can be converted to learners.",
+                Status = StatusCodes.Status400BadRequest
+            });
         }
 
         var learner = new Learner
         {
             ApplicationId = dto.ApplicationId
         };
+
 
         _context.Learners.Add(learner);
         await _context.SaveChangesAsync();
@@ -83,7 +112,11 @@ public class LearnersController : ControllerBase
 
         if (!learnerExists)
         {
-            return NotFound();
+            return NotFound(new ProblemDetails
+            {
+                Title = "Learner not found",
+                Status = StatusCodes.Status404NotFound
+            });
         }
 
         var eligible = await _eligibilityService.IsEligibleAsync(id);

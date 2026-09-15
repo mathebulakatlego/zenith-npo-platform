@@ -32,7 +32,11 @@ public class CohortsController : ControllerBase
 
         if (cohort == null)
         {
-            return NotFound();
+            return NotFound(new ProblemDetails
+            {
+                Title = "Cohort not found",
+                Status = StatusCodes.Status404NotFound
+            });
         }
 
         return cohort;
@@ -46,12 +50,20 @@ public class CohortsController : ControllerBase
 
         if (!programmeExists)
         {
-            return BadRequest("The Programme does not exist.");
+            return BadRequest(new ProblemDetails
+            {
+                Title = "Programme does not exist",
+                Status = StatusCodes.Status400BadRequest
+            });
         }
 
         if (dto.EndDate <= dto.StartDate)
         {
-            return BadRequest("End date must be after start date.");
+            return BadRequest(new ProblemDetails
+            {
+                Title = "End date must be after start date.",
+                Status = StatusCodes.Status400BadRequest
+            });
         }
 
         var cohort = new Cohort

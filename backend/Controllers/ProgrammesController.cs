@@ -30,7 +30,11 @@ public class ProgrammesController : ControllerBase
 
         if (programme is null)
         {
-            return NotFound();
+            return NotFound(new ProblemDetails
+            {
+                Title = "Programme not found",
+                Status = StatusCodes.Status404NotFound
+            });
         }
 
         return programme;

@@ -51,7 +51,11 @@ public async Task<ActionResult<ApplicationResponseDto>> GetApplication(int id)
 
         if (application == null)
         {
-            return NotFound();
+            return NotFound(new ProblemDetails
+            {
+                Title = "Applicant not found",
+                Status = StatusCodes.Status404NotFound
+            });
         }
 
         return Ok(application);
@@ -73,7 +77,11 @@ public async Task<ActionResult<ApplicationResponseDto>> GetApplication(int id)
 
         if (!programmeExists)
         {
-            return BadRequest("The Programme does not exist.");
+            return BadRequest(new ProblemDetails
+            {
+                Title = "Application must be approved before...",
+                Status = StatusCodes.Status400BadRequest
+            });
         }
 
         var application = new Application
@@ -98,14 +106,22 @@ public async Task<ActionResult<ApplicationResponseDto>> GetApplication(int id)
 
         if (application == null)
         {
-            return NotFound();
+            return NotFound(new ProblemDetails
+            {
+                Title = "Applicant not found",
+                Status = StatusCodes.Status404NotFound
+            });
         }
 
         var validStatuses = new[] { "Pending", "Approved", "Rejected" };
 
         if (!validStatuses.Contains(status))
         {
-            return BadRequest("Status must be Pending, Approved, or Rejected.");
+            return BadRequest(new ProblemDetails
+            {
+                Title = "Application must be approved before...",
+                Status = StatusCodes.Status400BadRequest
+            });
         }
 
         application.Status = status;

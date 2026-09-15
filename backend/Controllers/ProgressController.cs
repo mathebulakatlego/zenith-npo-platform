@@ -36,7 +36,11 @@ public class ProgressController : ControllerBase
 
         if (progress == null)
         {
-            return NotFound();
+            return NotFound(new ProblemDetails
+            {
+                Title = "Progress not found",
+                Status = StatusCodes.Status404NotFound
+            });
         }
 
         return progress;
@@ -50,7 +54,11 @@ public class ProgressController : ControllerBase
 
         if (!learnerExists)
         {
-            return BadRequest("The Learner does not exist.");
+            return BadRequest(new ProblemDetails
+            {
+                Title = "Learner does not exist",
+                Status = StatusCodes.Status400BadRequest
+            });
         }
 
         var moduleExists = await _context.Modules
@@ -58,7 +66,11 @@ public class ProgressController : ControllerBase
 
         if (!moduleExists)
         {
-            return BadRequest("The Module does not exist.");
+            return BadRequest(new ProblemDetails
+            {
+                Title = "Module does not exist",
+                Status = StatusCodes.Status400BadRequest
+            });
         }
 
         var progressExists = await _context.Progress
@@ -68,7 +80,12 @@ public class ProgressController : ControllerBase
 
         if (progressExists)
         {
-            return BadRequest("Progress already exists for this Learner and Module.");
+            return BadRequest(new ProblemDetails
+            {
+                Title = "Progress already exists for this Learner and Module.",
+                Status = StatusCodes.Status400BadRequest
+            });
+            
         }
 
         var status = dto.Percentage switch

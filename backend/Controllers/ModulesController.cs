@@ -35,7 +35,11 @@ public class ModulesController : ControllerBase
 
         if (module == null)
         {
-            return NotFound();
+            return NotFound(new ProblemDetails
+            {
+                Title = "Module not found",
+                Status = StatusCodes.Status404NotFound
+            });
         }
 
         return module;
@@ -49,12 +53,20 @@ public class ModulesController : ControllerBase
 
         if (!programmeExists)
         {
-            return BadRequest("The Programme does not exist.");
+           return BadRequest(new ProblemDetails
+            {
+                Title = "Programme does not exist",
+                Status = StatusCodes.Status400BadRequest
+            });
         }
 
         if (dto.Order < 1)
         {
-            return BadRequest("Module order must be greater than 0.");
+            return BadRequest(new ProblemDetails
+{
+    Title = "Module order must be a positive integer.",
+    Status = StatusCodes.Status400BadRequest
+});
         }
 
         var module = new Module

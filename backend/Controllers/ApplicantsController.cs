@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zenith.Api.Data;
 using Zenith.Api.Models;
+using Zenith.Api.DTOs;
 
 namespace Zenith.Api.Controllers;
 
@@ -29,15 +30,27 @@ public class ApplicantsController : ControllerBase
 
         if (applicant == null)
         {
-            return NotFound();
+            return NotFound(new ProblemDetails
+            {
+                Title = "Applicant not found",
+                Status = StatusCodes.Status404NotFound
+            });
         }
 
         return applicant;
     }
 
     [HttpPost]
-    public async Task<ActionResult<Applicant>> CreateApplicant(Applicant applicant)
+    public async Task<ActionResult<Applicant>> CreateApplicant(ApplicantCreateDto dto)
     {
+        var applicant = new Applicant
+        {
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            Email = dto.Email,
+            PhoneNumber = dto.PhoneNumber
+        };
+
         _context.Applicants.Add(applicant);
         await _context.SaveChangesAsync();
 

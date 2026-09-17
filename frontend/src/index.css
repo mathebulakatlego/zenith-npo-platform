@@ -41,6 +41,16 @@
   --weight-bold: 700;
 
   /* ========================================
+     Layout
+     ======================================== */
+
+  --container-width: 1200px;
+  --container-padding: 20px;
+
+  --section-padding: 80px;
+  --section-padding-mobile: 56px;
+
+  /* ========================================
      Status Colours
      ======================================== */
 
@@ -265,3 +275,38 @@ img {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* ========================================
+   Layout
+   ======================================== */
+
+.page-container {
+  width: min(
+    calc(100% - (var(--container-padding) * 2)),
+    var(--container-width)
+  );
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: var(--section-padding);
+}
+
+.section--light {
+  background: var(--zenith-light);
+}
+
+.section--blue {
+  background: var(--zenith-blue);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --container-padding: 16px;
+  }
+
+  .section {
+    padding-block: var(--section-padding-mobile);
+  }
+}
+

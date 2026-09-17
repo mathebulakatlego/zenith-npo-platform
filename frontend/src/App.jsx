@@ -1,120 +1,118 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+import Navbar from './components/layout/Navbar'
+import Footer from './components/layout/Footer'
+import PageContainer from './components/layout/PageContainer'
+import Section from './components/layout/Section'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      <Navbar />
 
-      <div className="ticks"></div>
+      <main>
+        <section className="home-hero">
+          <PageContainer>
+            <div className="home-hero__content">
+              <p className="home-hero__eyebrow">
+                Driven By Purpose | Powered By Technology
+              </p>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+              <h1>Building skills. Creating opportunities. Shaping futures.</h1>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+              <p className="home-hero__text">
+                Zenith Future Skills Hub equips young people with practical
+                digital skills, career readiness and opportunities to grow.
+              </p>
+
+              <div className="home-hero__actions">
+                <a className="btn btn--primary" href="/apply">
+                  Apply Now
+                </a>
+
+                <a className="btn btn--secondary" href="/programmes">
+                  Explore Programmes
+                </a>
+              </div>
+            </div>
+          </PageContainer>
+        </section>
+
+        <Section>
+          <PageContainer>
+            <div className="home-intro">
+              <div>
+                <p className="section-eyebrow">Who We Are</p>
+                <h2>Skills that open doors.</h2>
+              </div>
+
+              <div>
+                <p>
+                  Zenith Future Skills Hub is focused on helping young people
+                  develop practical skills that can translate into meaningful
+                  opportunities.
+                </p>
+
+                <p>
+                  Through accessible training, mentorship and career
+                  preparation, we help learners move from potential to
+                  possibility.
+                </p>
+              </div>
+            </div>
+          </PageContainer>
+        </Section>
+
+        <Section className="section--light">
+          <PageContainer>
+            <div className="section-heading">
+              <p className="section-eyebrow">Our Programme</p>
+              <h2>Learn skills you can use.</h2>
+
+              <p>
+                Practical learning designed to build confidence, capability
+                and career readiness.
+              </p>
+            </div>
+
+            <div className="programme-highlight">
+              <div>
+                <h3>Full Stack Developer Bootcamp</h3>
+
+                <p>
+                  A practical programme covering computer literacy, Git and
+                  Linux, HTML, CSS, SQL, JavaScript, Python, AI literacy and
+                  career readiness.
+                </p>
+              </div>
+
+              <a className="btn btn--primary" href="/programmes">
+                View Programme
+              </a>
+            </div>
+          </PageContainer>
+        </Section>
+
+        <Section className="home-cta">
+          <PageContainer>
+            <div className="home-cta__content">
+              <p className="section-eyebrow">Your Next Step</p>
+
+              <h2>Ready to grow your skills?</h2>
+
+              <p>
+                Explore our programmes and discover where your next opportunity
+                could begin.
+              </p>
+
+              <a className="btn btn--primary" href="/apply">
+                Start Your Application
+              </a>
+            </div>
+          </PageContainer>
+        </Section>
+      </main>
+
+      <Footer />
     </>
   )
 }

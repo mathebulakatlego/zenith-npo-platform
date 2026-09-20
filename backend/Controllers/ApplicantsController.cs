@@ -18,15 +18,38 @@ public class ApplicantsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Applicant>>> GetApplicants()
+    public async Task<ActionResult<IEnumerable<ApplicantResponseDto>>> GetApplicants()
     {
-        return await _context.Applicants.ToListAsync();
+        return await _context.Applicants
+            .Select(applicant => new ApplicantResponseDto
+            {
+                Id = applicant.Id,
+                FirstName = applicant.FirstName,
+                LastName = applicant.LastName,
+                Email = applicant.Email,
+                PhoneNumber = applicant.PhoneNumber,
+                DateOfBirth = applicant.DateOfBirth,
+                Address = applicant.Address
+            })
+            .ToListAsync();
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Applicant>> GetApplicant(int id)
+    public async Task<ActionResult<ApplicantResponseDto>> GetApplicant(int id)
     {
-        var applicant = await _context.Applicants.FindAsync(id);
+        var applicant = await _context.Applicants
+            .Where(candidate => candidate.Id == id)
+            .Select(candidate => new ApplicantResponseDto
+            {
+                Id = candidate.Id,
+                FirstName = candidate.FirstName,
+                LastName = candidate.LastName,
+                Email = candidate.Email,
+                PhoneNumber = candidate.PhoneNumber,
+                DateOfBirth = candidate.DateOfBirth,
+                Address = candidate.Address
+            })
+            .FirstOrDefaultAsync();
 
         if (applicant == null)
         {
@@ -48,7 +71,10 @@ public class ApplicantsController : ControllerBase
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             Email = dto.Email,
-            PhoneNumber = dto.PhoneNumber
+            PhoneNumber = dto.PhoneNumber,
+            IdNumber = dto.IdNumber,
+            DateOfBirth = dto.DateOfBirth!.Value,
+            Address = dto.Address
         };
 
         _context.Applicants.Add(applicant);

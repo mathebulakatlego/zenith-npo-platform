@@ -7,4 +7,5 @@ public class ApplicationResponseDto
     public int ProgrammeId { get; set; }
     public DateTime SubmittedAt { get; set; }
     public string Status { get; set; } = string.Empty;
+    public string Motivation { get; set; } = string.Empty;
 }

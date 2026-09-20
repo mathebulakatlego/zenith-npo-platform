@@ -15,4 +15,8 @@ public class Application
     public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
 
     public string Status { get; set; } = "Pending";
+
+    public string Motivation { get; set; } = string.Empty;
+
+    public ICollection<ApplicationDocument> Documents { get; set; } = new List<ApplicationDocument>();
 }

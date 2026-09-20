@@ -9,4 +9,8 @@ public class ApplicationCreateDto
 
     [Required]
     public int ProgrammeId { get; set; }
+
+    [Required]
+    [StringLength(2000)]
+    public string Motivation { get; set; } = string.Empty;
 }

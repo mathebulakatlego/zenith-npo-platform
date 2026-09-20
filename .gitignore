@@ -4,6 +4,10 @@
 
 # Local database
 zenith.db
+**/zenith.db-*
+
+# Local application uploads
+**/uploads/
 
 # Frontend dependencies and build output
 frontend/node_modules/

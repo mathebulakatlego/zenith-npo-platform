@@ -26,7 +26,9 @@
     <Compile Include="..\Controllers\ApplicantsController.cs" Link="Controllers\ApplicantsController.cs" />
 
     <Compile Include="..\Models\Application.cs" Link="Models/Application.cs" />
+    <Compile Include="..\Models\ApplicationDocument.cs" Link="Models/ApplicationDocument.cs" />
     <Compile Include="..\Controllers\ApplicationsController.cs" Link="Controllers/ApplicationsController.cs" />
+    <Compile Include="..\Controllers\ApplicationDocumentsController.cs" Link="Controllers/ApplicationDocumentsController.cs" />
 
     <Compile Include="..\Models\Learner.cs" Link="Models/Learner.cs" />
     <Compile Include="..\Controllers\LearnersController.cs" Link="Controllers/LearnersController.cs" />
@@ -47,7 +49,9 @@
 
     <Compile Include="..\DTOs\ProgrammeCreateDto.cs" Link="DTOs/ProgrammeCreateDto.cs" />
     <compile Include="..\DTOs\ApplicantCreateDto.cs" Link="DTOs/ApplicantCreateDto.cs" />
+    <Compile Include="..\DTOs\ApplicantResponseDto.cs" Link="DTOs/ApplicantResponseDto.cs" />
     <Compile Include="..\DTOs\ApplicationCreateDto.cs" Link="DTOs/ApplicationCreateDto.cs" /> 
+    <Compile Include="..\DTOs\ApplicationDocumentResponseDto.cs" Link="DTOs/ApplicationDocumentResponseDto.cs" />
     <Compile Include="..\DTOs\LearnerCreateDto.cs" Link="DTOs/LearnerCreateDto.cs" />
     <Compile Include="..\DTOs\CohortCreateDto.cs" Link="DTOs/CohortCreateDto.cs" />
     <Compile Include="..\DTOs\ModuleCreateDto.cs" Link="DTOs/ModuleCreateDto.cs" />

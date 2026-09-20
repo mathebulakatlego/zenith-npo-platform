@@ -27,7 +27,8 @@ public class ApplicationsController : ControllerBase
                 ApplicantId = a.ApplicantId,
                 ProgrammeId = a.ProgrammeId,
                 SubmittedAt = a.SubmittedAt,
-                Status = a.Status
+                Status = a.Status,
+                Motivation = a.Motivation
             })
             .ToListAsync();
 
@@ -45,7 +46,8 @@ public async Task<ActionResult<ApplicationResponseDto>> GetApplication(int id)
                 ApplicantId = a.ApplicantId,
                 ProgrammeId = a.ProgrammeId,
                 SubmittedAt = a.SubmittedAt,
-                Status = a.Status
+                Status = a.Status,
+                Motivation = a.Motivation
             })
             .FirstOrDefaultAsync();
 
@@ -87,7 +89,8 @@ public async Task<ActionResult<ApplicationResponseDto>> GetApplication(int id)
         var application = new Application
         {
             ApplicantId = dto.ApplicantId,
-            ProgrammeId = dto.ProgrammeId
+            ProgrammeId = dto.ProgrammeId,
+            Motivation = dto.Motivation
         };
 
         _context.Applications.Add(application);

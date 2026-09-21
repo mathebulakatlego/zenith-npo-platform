@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Zenith.Api.Data;
@@ -11,14 +12,18 @@ namespace Zenith.Api.Controllers;
 public class ApplicationDocumentsController : ControllerBase
 {
     private const long MaxFileSize = 10 * 1024 * 1024;
-    private static readonly string[] AllowedDocumentTypes = ["ID", "CV", "Qualification"];
-    private static readonly Dictionary<string, string> AllowedExtensions = new(StringComparer.OrdinalIgnoreCase)
-    {
-        [".pdf"] = "application/pdf",
-        [".png"] = "image/png",
-        [".jpg"] = "image/jpeg",
-        [".jpeg"] = "image/jpeg"
-    };
+
+    private static readonly string[] AllowedDocumentTypes =
+        ["ID", "CV", "Qualification"];
+
+    private static readonly Dictionary<string, string> AllowedExtensions =
+        new(StringComparer.OrdinalIgnoreCase)
+        {
+            [".pdf"] = "application/pdf",
+            [".png"] = "image/png",
+            [".jpg"] = "image/jpeg",
+            [".jpeg"] = "image/jpeg"
+        };
 
     private readonly ZenithDbContext _context;
     private readonly IWebHostEnvironment _environment;
@@ -32,9 +37,12 @@ public class ApplicationDocumentsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ApplicationDocumentResponseDto>>> GetDocuments(int applicationId)
+    public async Task<ActionResult<IEnumerable<ApplicationDocumentResponseDto>>> GetDocuments(
+        int applicationId)
     {
-        var applicationExists = await _context.Applications.AnyAsync(application => application.Id == applicationId);
+        var applicationExists = await _context.Applications
+            .AnyAsync(application => application.Id == applicationId);
+
         if (!applicationExists)
         {
             return NotFound(new ProblemDetails
@@ -55,12 +63,21 @@ public class ApplicationDocumentsController : ControllerBase
 
     [HttpPost]
     [RequestSizeLimit(MaxFileSize)]
+    [Consumes("multipart/form-data")]
     public async Task<ActionResult<ApplicationDocumentResponseDto>> UploadDocument(
         int applicationId,
         [FromForm] string documentType,
-        [FromForm] IFormFile? file)
+        IFormFile? file)
     {
-        var applicationExists = await _context.Applications.AnyAsync(application => application.Id == applicationId);
+        var request = new ApplicationDocumentUploadDto
+        {
+            DocumentType = documentType ?? string.Empty,
+            File = file
+        };
+
+        var applicationExists = await _context.Applications
+            .AnyAsync(application => application.Id == applicationId);
+
         if (!applicationExists)
         {
             return NotFound(new ProblemDetails
@@ -70,8 +87,11 @@ public class ApplicationDocumentsController : ControllerBase
             });
         }
 
-        var normalizedDocumentType = documentType.Trim();
-        if (!AllowedDocumentTypes.Contains(normalizedDocumentType, StringComparer.OrdinalIgnoreCase))
+        var normalizedDocumentType = request.DocumentType.Trim();
+
+        if (!AllowedDocumentTypes.Contains(
+                normalizedDocumentType,
+                StringComparer.OrdinalIgnoreCase))
         {
             return BadRequest(new ProblemDetails
             {
@@ -81,7 +101,7 @@ public class ApplicationDocumentsController : ControllerBase
             });
         }
 
-        if (file is null || file.Length == 0)
+        if (request.File is null || request.File.Length == 0)
         {
             return BadRequest(new ProblemDetails
             {
@@ -90,7 +110,7 @@ public class ApplicationDocumentsController : ControllerBase
             });
         }
 
-        if (file.Length > MaxFileSize)
+        if (request.File.Length > MaxFileSize)
         {
             return BadRequest(new ProblemDetails
             {
@@ -100,9 +120,15 @@ public class ApplicationDocumentsController : ControllerBase
             });
         }
 
-        var extension = Path.GetExtension(file.FileName);
-        if (!AllowedExtensions.TryGetValue(extension, out var expectedContentType) ||
-            !string.Equals(file.ContentType, expectedContentType, StringComparison.OrdinalIgnoreCase))
+        var extension = Path.GetExtension(request.File.FileName);
+
+        if (!AllowedExtensions.TryGetValue(
+                extension,
+                out var expectedContentType) ||
+            !string.Equals(
+                request.File.ContentType,
+                expectedContentType,
+                StringComparison.OrdinalIgnoreCase))
         {
             return BadRequest(new ProblemDetails
             {
@@ -112,8 +138,10 @@ public class ApplicationDocumentsController : ControllerBase
             });
         }
 
-        var originalFileName = Path.GetFileName(file.FileName);
-        if (string.IsNullOrWhiteSpace(originalFileName) || originalFileName.Length > 255)
+        var originalFileName = Path.GetFileName(request.File.FileName);
+
+        if (string.IsNullOrWhiteSpace(originalFileName) ||
+            originalFileName.Length > 255)
         {
             return BadRequest(new ProblemDetails
             {
@@ -122,28 +150,48 @@ public class ApplicationDocumentsController : ControllerBase
             });
         }
 
-        var storedFileName = $"{Guid.NewGuid():N}{extension.ToLowerInvariant()}";
-        var relativeFilePath = Path.Combine("uploads", "applications", applicationId.ToString(), storedFileName);
+        var storedFileName =
+            $"{Guid.NewGuid():N}{extension.ToLowerInvariant()}";
+
+        var relativeFilePath = Path.Combine(
+            "uploads",
+            "applications",
+            applicationId.ToString(),
+            storedFileName);
+
         var absoluteDirectory = Path.Combine(
             _environment.ContentRootPath,
             "uploads",
             "applications",
             applicationId.ToString());
-        var absoluteFilePath = Path.Combine(absoluteDirectory, storedFileName);
+
+        var absoluteFilePath = Path.Combine(
+            absoluteDirectory,
+            storedFileName);
 
         Directory.CreateDirectory(absoluteDirectory);
-        await using (var stream = new FileStream(absoluteFilePath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+
+        await using (var stream = new FileStream(
+            absoluteFilePath,
+            FileMode.CreateNew,
+            FileAccess.Write,
+            FileShare.None))
         {
-            await file.CopyToAsync(stream);
+            await request.File.CopyToAsync(stream);
         }
 
         var document = new ApplicationDocument
         {
             ApplicationId = applicationId,
             DocumentType = AllowedDocumentTypes.First(type =>
-                string.Equals(type, normalizedDocumentType, StringComparison.OrdinalIgnoreCase)),
+                string.Equals(
+                    type,
+                    normalizedDocumentType,
+                    StringComparison.OrdinalIgnoreCase)),
             FileName = originalFileName,
-            FilePath = relativeFilePath.Replace(Path.DirectorySeparatorChar, '/'),
+            FilePath = relativeFilePath.Replace(
+                Path.DirectorySeparatorChar,
+                '/'),
             UploadedAt = DateTime.UtcNow
         };
 
@@ -164,7 +212,8 @@ public class ApplicationDocumentsController : ControllerBase
             ToResponse(document));
     }
 
-    private static ApplicationDocumentResponseDto ToResponse(ApplicationDocument document)
+    private static ApplicationDocumentResponseDto ToResponse(
+        ApplicationDocument document)
     {
         return new ApplicationDocumentResponseDto
         {
@@ -176,3 +225,4 @@ public class ApplicationDocumentsController : ControllerBase
         };
     }
 }
+

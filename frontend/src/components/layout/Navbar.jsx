@@ -1,21 +1,24 @@
+import { NavLink } from 'react-router-dom'
+
 function Navbar() {
   return (
     <header className="site-header">
       <nav className="navbar" aria-label="Main navigation">
-        <a className="navbar__brand" href="/">
+        <NavLink className="navbar__brand" to="/home">
           Zenith Future Skills Hub
-        </a>
+        </NavLink>
 
         <div className="navbar__links">
-          <a href="/about">About</a>
-          <a href="/programmes">Programmes</a>
-          <a href="/team">Team</a>
-          <a href="/contact">Contact</a>
+          <NavLink to="/home">Home</NavLink>
+          <NavLink to="/about">About</NavLink>
+          <NavLink to="/programmes">Programmes</NavLink>
+          <NavLink to="/contact">Contact</NavLink>
+          <NavLink to="/support">Support</NavLink>
         </div>
 
-        <a className="btn btn--primary navbar__cta" href="/apply">
+        <NavLink className="btn btn--primary navbar__cta" to="/apply">
           Apply Now
-        </a>
+        </NavLink>
       </nav>
     </header>
   );
